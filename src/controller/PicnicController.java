@@ -1,7 +1,6 @@
 package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -9,8 +8,8 @@ import java.util.regex.Pattern;
 public class PicnicController {
     Pattern p = Pattern.compile(" ");
     Map<String, Integer> wordsMap = new HashMap<>();
-    ArrayList<String> wordsList = new ArrayList<>();
-    public void countOfWords(BufferedReader br) throws IOException {
+
+    public Map<String,Integer>  countOfWords(BufferedReader br) throws IOException {
         String line = br.readLine();
         while (line != null) {
             String[] tokens = p.split(line.toLowerCase());
@@ -24,50 +23,28 @@ public class PicnicController {
             }
             line = br.readLine();
         }
-        wordsMap.entrySet().stream().sorted((entry1, entry2) -> {
-            return entry2.getValue() - entry1.getValue();
-        }).forEach(entry -> {
-            System.out.println(String.format("%s - %s", entry.getKey(), entry.getValue()));
-        });
+        return  wordsMap;
     }
 
     public int sumOfWords(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        int count = 0;
-        while (line != null) {
-            String[] tokens = p.split(line.toLowerCase());
-            for (String token : tokens) {
-                wordsList.add(token);
-                count++;
-            }
-            line = br.readLine();
+        wordsMap = countOfWords(br);
+        Integer count = 0;
+        for (Integer value : wordsMap.values()) {
+                count = count + value;
         }
         return count;
     }
 
     public String longestWord(BufferedReader br) throws IOException {
-        String line = br.readLine();
-
-        while (line != null) {
-            String[] tokens = p.split(line.toLowerCase());
-            for (String token : tokens) {
-                String [] words = token.split(" ");
-                for(int i = 0 ; i<words.length; i++) {
-                    wordsList.add(words[i]);
+        int maxLength = 0;
+        String maxWord = "";
+        wordsMap = countOfWords(br);
+            for (String key : wordsMap.keySet()) {
+                if (maxLength < key.length()) {
+                    maxLength = key.length();
+                    maxWord = key;
                 }
             }
-            line = br.readLine();
-        }
-
-        int maxLength = 0;
-        String maxWord = null;
-        for(String word : wordsList){
-            if(word.length() > maxLength){
-                maxLength = word.length();
-                maxWord = word;
-            }
-        }
         return maxWord;
     }
-
 }

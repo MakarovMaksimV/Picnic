@@ -1,5 +1,4 @@
-import view.PicnicView;
-
+import util.AplicationRun;
 import java.io.IOException;
 
 public class Main {
